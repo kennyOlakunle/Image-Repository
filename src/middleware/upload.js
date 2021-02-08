@@ -27,9 +27,8 @@ var storage = new GridFsStorage({
   },
 });
 
-// util.promisify() to make the exported middleware object can be used with async-await
-
-// var uploadFile = multer({ storage: storage }).single('file');
 var uploadFiles = multer({ storage: storage }).array('multi-files', 10);
+
+// util.promisify() to make the exported middleware object can be used with async-await
 var uploadFilesMiddleware = util.promisify(uploadFiles);
 module.exports = uploadFilesMiddleware;

@@ -20,7 +20,9 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-8 mt-3">
-          <h4>Node.js Upload images</h4>
+          <h1 style="text-align: center;">Image Repository</h1>
+
+          <h4 style="text-align: center;">Upload your images</h4>
 
           <form
             class="mt-4"
@@ -34,46 +36,54 @@
                 name="multi-files"
                 multiple
                 id="input-files"
+                accept="image/*"
+                onchange="showMyImage(this)"
                 class="form-control-file border"
               />
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary border-0">
+              Submit
+            </button>
           </form>
         </div>
       </div>
       <hr />
       <div class="row">
         <div class="col-sm-12">
-          <div class="preview-images"></div>
+          <div class="preview-images">
+            <img
+              id="thumbnil"
+              style="width: 30%; margin-top: 20px;"
+              src=""
+              alt="image"
+            />
+          </div>
         </div>
       </div>
     </div>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-
-    <!-- This jQuery script shows preview of the chosen images. -->
 
     <script>
-      $(document).ready(function () {
-        let imagesPreview = function (input, placeToInsertImagePreview) {
-          if (input.files) {
-            let filesAmount = input.files.length;
-            for (i = 0; i < filesAmount; i++) {
-              let reader = new FileReader();
-              reader.onload = function (event) {
-                $($.parseHTML('<img>'))
-                  .attr('src', event.target.result)
-                  .appendTo(placeToInsertImagePreview);
-              };
-              reader.readAsDataURL(input.files[i]);
-            }
+      function showMyImage(fileInput) {
+        var files = fileInput.files;
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          var imageType = /image.*/;
+          if (!file.type.match(imageType)) {
+            continue;
           }
-        };
-        $('#input-files').on('change', function () {
-          imagesPreview(this, 'div.preview-images');
-        });
-      });
+          var img = document.getElementById('thumbnil');
+          img.file = file;
+          var reader = new FileReader();
+          reader.onload = (function (aImg) {
+            return function (e) {
+              aImg.src = e.target.result;
+            };
+          })(img);
+          reader.readAsDataURL(file);
+        }
+      }
     </script>
   </body>
 </html>
